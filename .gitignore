@@ -1,0 +1,4 @@
+
+config.ts
+.deno_plugins/*
+run.bat
