@@ -14,7 +14,9 @@ import user from "./schema/user.ts";
 const app:Application = new Application();
 const session = new Session({
     framework: "oak",
-    store: "memory",
+    store: "redis",
+    hostname: "127.0.0.1",
+    port: 6379,
 });
 await session.init();
 
