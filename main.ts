@@ -1,4 +1,4 @@
-import { Application, Router, helpers, Context, isHttpError } from "https://deno.land/x/oak/mod.ts";
+import { Application, Router, helpers, Context, isHttpError, httpErrors } from "https://deno.land/x/oak/mod.ts";
 import { Session } from "https://deno.land/x/session@1.1.0/mod.ts";
 import {
   bold,
@@ -7,8 +7,7 @@ import {
   yellow,
 } from "https://deno.land/std@0.82.0/fmt/colors.ts";
 import { HOST, PORT, TWITCONF } from "./config.ts";
-import { ANY } from "./const.ts";
-import { TWITTER } from "./twitter.ts";
+import { ANY, TWITTER } from "./const.ts";
 import user from "./schema/user.ts";
 
 const app:Application = new Application();
@@ -25,9 +24,12 @@ app.use(session.use()(session));
 app.use(async (c, next) => {
   try {
     await next();
+    if (c.response.status == 404)
+      throw new httpErrors.NotFound();
   } catch(e) {
     if (isHttpError(e)){
-      c.response.body = e.status;
+      c.response.status = e.status;
+      c.response.body = e.message;
       return;
     }
     console.log(e);
