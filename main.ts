@@ -73,6 +73,14 @@ router
     c.response.body = await c.request.body;
   })
 
+  .get("/profile/:id", async (c) => {
+    // c.response.body = render("profile");
+  })
+
+  .post("/profile", async (c) => {
+    c.response.body = await user.findOne({ url: c.params.id });
+  })
+
   .get("/login", async (c) => {
     if (await c.state.session.get("auth")) {
       c.response.redirect("/");
@@ -133,7 +141,10 @@ router
         twitter_id: userData.id,
         display_name: userData.name,
         display_id: userData.screen_name,
-        profile: userData.profile_image_url_https.replace("_normal.jpg",".jpg")
+        profile: userData.profile_image_url_https.replace("_normal.jpg",".jpg"),
+        created: new Date(userData.created_at),
+        url: userData.id.toString(36),
+        protect: 0
       });
     await c.state.session.set("auth", true);
     await c.state.session.set("id", userData.id);

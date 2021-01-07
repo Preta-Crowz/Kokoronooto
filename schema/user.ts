@@ -4,6 +4,9 @@ export interface schema {
     display_name: string;
     display_id: string;
     profile: string;
+    created: Date;
+    url: string;
+    protect: number;
 }
-export const collection = DB.collection<schema>("user");
+const collection = DB.collection<schema>("user");
 export default collection;
