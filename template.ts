@@ -16,19 +16,33 @@ export class Template{
   render(data:any):string{
     if(!this.data) return "";
     let template = this.data;
-    if(template.match(/\${(.+?)}/g) === null) return template;
-    const iter:Set<string> = new Set(template.match(/\${(.+?)}/g));
-    iloop:for(const v of iter){
-      let key:string[] = v.substr(2,v.length-3).split(".");
-      if(key.length === 0) continue;
-      let loop:any = data;
-      for(let k of key){
-        if(loop[k] === undefined) continue iloop;
-        loop = loop[k]
+
+    if(template.match(/%{(.+?)}/g) !== null){
+      const iter:Set<string> = new Set(template.match(/%{(.+?)}/g));
+      iloop:for(const v of iter){
+        const key:string = v.substr(2,v.length-3);
+        if(key.length === 0) continue;
+        const include = new Template(key);
+        if(include.data === undefined) continue;
+        template = template.replaceAll(v, include.data);
       }
-      if(loop === undefined) continue;
-      template = template.replaceAll(v, loop.toString())
     }
+
+    if(template.match(/\${(.+?)}/g) !== null){
+      const iter:Set<string> = new Set(template.match(/\${(.+?)}/g));
+      iloop:for(const v of iter){
+        const key:string[] = v.substr(2,v.length-3).split(".");
+        if(key.length === 0) continue;
+        let loop:any = data;
+        for(let k of key){
+          if(loop[k] === undefined) continue iloop;
+          loop = loop[k];
+        }
+        if(loop === undefined) continue;
+        template = template.replaceAll(v, loop.toString());
+      }
+    }
+
     return template;
   }
 }
