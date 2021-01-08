@@ -19,7 +19,7 @@ export class Template{
 
     if(template.match(/%{(.+?)}/g) !== null){
       const iter:Set<string> = new Set(template.match(/%{(.+?)}/g));
-      iloop:for(const v of iter){
+      for(const v of iter){
         const key:string = v.substr(2,v.length-3);
         if(key.length === 0) continue;
         const include = new Template(key);
