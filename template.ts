@@ -39,6 +39,7 @@ export class Template{
           loop = loop[k];
         }
         if(loop === undefined) continue;
+        if(typeof loop === "object") loop = JSON.stringify(loop);
         template = template.replaceAll(v, loop.toString());
       }
     }

@@ -7,7 +7,7 @@ import {
   yellow,
 } from "https://deno.land/std@0.82.0/fmt/colors.ts";
 import { HOST, PORT, TWITCONF } from "./config.ts";
-import { ANY, TWITTER } from "./const.ts";
+import { ANY, TWITTER, TEMPLATE } from "./const.ts";
 import user from "./schema/user.ts";
 
 const app:Application = new Application();
@@ -68,17 +68,20 @@ router
       + "AUTHED : " + await c.state.session.get("auth")
       + "\nID : " + await c.state.session.get("id");
   })
-  
-  .post("/", async (c) => {
-    c.response.body = await c.request.body;
-  })
 
   .get("/profile/:id", async (c) => {
-    // c.response.body = render("profile");
-  })
-
-  .post("/profile", async (c) => {
-    c.response.body = await user.findOne({ url: c.params.id });
+    const usr = await user.findOne({ url: c.params.id });
+    if (usr === null) {
+      return;
+    }
+    c.response.type = "html"
+    c.response.body = TEMPLATE.profile.render({
+      "session": {
+        "auth": await c.state.session.get("auth"),
+        "id": await c.state.session.get("id")
+      },
+      "user": usr
+    });
   })
 
   .get("/login", async (c) => {
