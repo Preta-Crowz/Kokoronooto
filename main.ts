@@ -59,6 +59,19 @@ app.use(async (c, next) => {
   await next();
 });
 
+app.use(async (c, next) => {
+  await next();
+  if (c.state.template === undefined) return;
+  c.response.type = "html"
+  c.state.templateData.session = {
+    "auth": await c.state.session.get("auth"),
+    "id": await c.state.session.get("id")
+  };
+  const template = TEMPLATE.get(c.state.template)
+  if (template === undefined) return;
+  c.response.body = template.render(c.state.templateData);
+});
+
 console.log("Inited");
 
 const router = new Router();
@@ -74,14 +87,10 @@ router
     if (usr === null) {
       return;
     }
-    c.response.type = "html"
-    c.response.body = TEMPLATE.profile.render({
-      "session": {
-        "auth": await c.state.session.get("auth"),
-        "id": await c.state.session.get("id")
-      },
-      "user": usr
-    });
+    c.state.template = "profile"
+    c.state.templateData = {
+      "user":usr
+    };
   })
 
   .get("/login", async (c) => {

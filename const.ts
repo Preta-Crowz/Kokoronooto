@@ -13,6 +13,5 @@ export const TWITTER = new OAuth2Client({
     scope: "read:user",
   },
 });
-export const TEMPLATE = {
-  profile: new Template("./template/profile.html")
-};
+export const TEMPLATE = new Map<string, Template>();
+TEMPLATE.set("profile", new Template("./template/profile.html"));
