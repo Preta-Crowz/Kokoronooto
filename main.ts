@@ -54,6 +54,8 @@ app.use(async (c, next) => {
 });
 
 app.use(async (c, next) => {
+  c.state.template = undefined;
+  c.state.templateData = undefined;
   await next();
   if (c.state.template === undefined) return;
   c.response.type = "html"
@@ -74,6 +76,7 @@ router
     c.response.body = "Project:心の音 / 페이지에는 아직 아무것도 없지만, 고양이는 있습니다.\n"
       + "AUTHED : " + await c.state.session.get("auth")
       + "\nID : " + await c.state.session.get("id");
+    c.response.type = "text";
   })
 
   .get("/profile/:id", async (c) => {
@@ -180,6 +183,15 @@ router
   //   ]);
   //   return "Inserted!";
   // })
+
+  .get("/test", async (c) => {
+    if (!await c.state.session.get("auth")) {
+      c.response.redirect("/");
+      return;
+    }
+    c.state.template = "test";
+    c.state.templateData = {"a":1234,"b":5678,"c":{"d":3141}};
+  })
 
   .get("/test/count", async (c) => {
     if (!await c.state.session.get("auth")) {
