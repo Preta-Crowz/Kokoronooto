@@ -1,4 +1,4 @@
-import { OAuth2Client } from "https://deno.land/x/oauth2_client/mod.ts";
+import { OAuth2Client } from "./deps.ts";
 import { TWITCONF } from "./config.ts";
 import { Template } from "./template.ts";
 

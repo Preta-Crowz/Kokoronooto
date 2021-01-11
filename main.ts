@@ -1,11 +1,5 @@
-import { Application, Router, helpers, Context, isHttpError, httpErrors } from "https://deno.land/x/oak/mod.ts";
-import { Session } from "https://deno.land/x/session@1.1.0/mod.ts";
-import {
-  bold,
-  cyan,
-  green,
-  yellow,
-} from "https://deno.land/std@0.82.0/fmt/colors.ts";
+import { Application, Router, helpers, Context,
+  isHttpError, httpErrors, Session, bold, yellow } from "./deps.ts";
 import { HOST, PORT, TWITCONF } from "./config.ts";
 import { ANY, TWITTER, TEMPLATE } from "./const.ts";
 import user from "./schema/user.ts";

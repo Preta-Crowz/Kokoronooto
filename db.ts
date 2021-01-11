@@ -1,5 +1,4 @@
-// import { MongoClient } from "https://deno.land/x/mongo@v0.20.1/mod.ts";
-import { MongoClient } from "https://deno.land/x/mongo@v0.13.0/mod.ts";
+import { MongoClient } from "./deps.ts";
 import { DBCONN } from "./config.ts";
 
 export const CLI = new MongoClient();
