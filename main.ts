@@ -55,7 +55,7 @@ app.use(async (c, next) => {
 
 app.use(async (c, next) => {
   c.state.template = undefined;
-  c.state.templateData = undefined;
+  c.state.templateData = {};
   await next();
   if (c.state.template === undefined) return;
   c.response.type = "html"
@@ -73,9 +73,7 @@ console.log("Inited");
 const router = new Router();
 router
   .get("/", async (c) => {
-    c.response.body = "Project:心の音 / 페이지에는 아직 아무것도 없지만, 고양이는 있습니다.\n"
-      + "AUTHED : " + await c.state.session.get("auth")
-      + "\nID : " + await c.state.session.get("id");
+    c.state.template = "main";
     c.response.type = "text";
   })
 

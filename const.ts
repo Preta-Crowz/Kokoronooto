@@ -14,5 +14,6 @@ export const TWITTER = new OAuth2Client({
   },
 });
 export const TEMPLATE = new Map<string, Template>();
+TEMPLATE.set("main", new Template("./template/main.html"));
 TEMPLATE.set("profile", new Template("./template/profile.html"));
 TEMPLATE.set("test", new Template("./template/test.html"));
