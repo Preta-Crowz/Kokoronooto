@@ -18,8 +18,8 @@ export class Template{
     let template = this.data;
     let noContinue:boolean = false;
 
-    while(template.match(/%{(.+?)}/g) !== null && noContinue === false){
-      const iter:Set<string> = new Set(template.match(/%{(.+?)}/g));
+    while(template.match(/%{([^{]+?)}/g) !== null && noContinue === false){
+      const iter:Set<string> = new Set(template.match(/%{([^{]+?)}/g));
       noContinue = true;
       for(const v of iter){
         const key:string = v.substr(2,v.length-3);
@@ -32,8 +32,8 @@ export class Template{
     }
 
     noContinue = false;
-    if(template.match(/\${(.+?)}/g) !== null && noContinue === false){
-      const iter:Set<string> = new Set(template.match(/\${(.+?)}/g));
+    while(template.match(/\${([^{]+?)}/g) !== null && noContinue === false){
+      const iter:Set<string> = new Set(template.match(/\${([^{]+?)}/g));
       noContinue = true;
       iloop:for(const v of iter){
         const key:string[] = v.substr(2,v.length-3).split(/[.?]/);

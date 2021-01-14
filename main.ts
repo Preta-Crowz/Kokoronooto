@@ -2,6 +2,7 @@ import { Application, Router, helpers, Context,
   isHttpError, httpErrors, Session, bold, yellow } from "./deps.ts";
 import { HOST, PORT, TWITCONF } from "./config.ts";
 import { ANY, TWITTER, TEMPLATE } from "./const.ts";
+import { MESSAGE } from "./message.ts";
 import user from "./schema/user.ts";
 
 const app:Application = new Application();
@@ -58,11 +59,13 @@ app.use(async (c, next) => {
   c.state.templateData = {};
   await next();
   if (c.state.template === undefined) return;
-  c.response.type = "html"
+  c.response.type = "html";
+  c.state.templateData.template = c.state.template;
   c.state.templateData.session = {
     "auth": await c.state.session.get("auth"),
     "id": await c.state.session.get("id")
   };
+  c.state.templateData.Message = MESSAGE;
   const template = TEMPLATE.get(c.state.template)
   if (template === undefined) return;
   c.response.body = template.render(c.state.templateData);
@@ -75,6 +78,19 @@ router
   .get("/", async (c) => {
     c.state.template = "main";
     c.response.type = "text";
+  })
+
+  .get("/res/:name", async (c) => {
+    const path = "./res/" + c.params.name
+    try {
+      const data = Deno.readFileSync(path);
+      c.response.body = data;
+
+      const temp = path.split(".");
+      c.response.type = temp[temp.length - 1];
+    } catch (e) {
+      if (e.name !== "NotFound") throw e;
+    }
   })
 
   .get("/profile/:id", async (c) => {
@@ -206,6 +222,7 @@ router
     }
     c.response.body = await user.find({ twitter_id: ANY });
   })
+
 
 app.use(router.routes());
 app.use(router.allowedMethods());
