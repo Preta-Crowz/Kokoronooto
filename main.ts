@@ -82,7 +82,6 @@ const router = new Router();
 router
   .get("/", async (c) => {
     c.state.template = "main";
-    c.response.type = "text";
   })
 
   .get("/res/:name", async (c) => {
