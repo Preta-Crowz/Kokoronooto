@@ -49,8 +49,13 @@ app.use(async (c, next) => {
 });
 
 app.use(async (c, next) => {
-  if (await c.state.session.get("auth") === undefined)
-    await c.state.session.set("auth", false);
+  try {
+    if (await c.state.session.get("auth") === undefined)
+      await c.state.session.set("auth", false);
+  } catch(e) {
+    if (e.name === "SyntaxError") return;
+    throw e;
+  }
   await next();
 });
 
