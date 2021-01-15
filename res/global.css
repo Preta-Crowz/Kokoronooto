@@ -5,9 +5,14 @@
     font-style: normal;
 }
 
+a {
+    color: inherit;
+} 
+
 body {
     margin: 0 8px;
 }
+
 header {
     background-color: #AFF;
     width: 100%;
@@ -24,9 +29,9 @@ header {
     position: relative;
 }
 
-#btnMenu {
+#btnMenu div {
     float: left;
-    margin-left: 2px;
+    margin-left: 4px;
     width: 40px;
     height: 40px;
 }
@@ -38,4 +43,13 @@ header {
     font-size: 25px;
     text-align: center;
     top: 10px;
+}
+
+#btnProfile div {
+    float: right;
+    margin: 2px 10px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-size: 100% 100%;
 }

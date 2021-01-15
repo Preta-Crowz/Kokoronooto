@@ -70,6 +70,11 @@ app.use(async (c, next) => {
     "auth": await c.state.session.get("auth"),
     "id": await c.state.session.get("id")
   };
+  if (await c.state.session.get("auth") === true){
+    c.state.templateData.user = await user.findOne({
+      twitter_id: await c.state.session.get("id")
+    });
+  };
   c.state.templateData.Message = MESSAGE;
   const template = TEMPLATE.get(c.state.template)
   if (template === undefined) return;
