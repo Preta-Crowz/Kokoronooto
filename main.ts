@@ -75,10 +75,11 @@ app.use(async (c, next) => {
       twitter_id: await c.state.session.get("id")
     });
   };
+  c.state.templateData.page = c.state.template;
   c.state.templateData.Message = MESSAGE;
-  const template = TEMPLATE.get(c.state.template)
-  if (template === undefined) return;
-  c.response.body = template.render(c.state.templateData);
+  // const template = TEMPLATE.get(c.state.template)
+  // if (template === undefined) return;
+  c.response.body = TEMPLATE.render(c.state.templateData);
 });
 
 console.log("Inited");

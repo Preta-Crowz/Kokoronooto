@@ -1,12 +1,11 @@
-%{./template/global.html}
 <body>
-    <header>
-        <a id="btnMenu" href="#">
-            <div><i class="fas fa-bars fa-3x"></i></div>
-        </a>
-        <div id="currPage">${Message.page.${template}?알 수 없는 페이지}</div>
-        <a id="btnProfile" href="#">
-            ?{session.auth|<div style="background-image: url('${user.profile?}');"></div>|<div style="margin-right: 12px; margin-top: 0"><i class="fas fa-user fa-3x"></i></div>}
-        </a>
-    </header>
-    <div id="dummyHeader"></div>
+<header>
+    <a id="btnMenu" href="#">
+        <div><i class="fas fa-bars fa-3x"></i></div>
+    </a>
+    <div id="currPage">${Message.page.${template}?알 수 없는 페이지}</div>
+    <a id="btnProfile" href="#">
+        ?{session.auth|<div style="background-image: url('${user.profile?}');"></div>|<div style="margin-right: 12px; margin-top: 0"><i class="fas fa-user fa-3x"></i></div>}
+    </a>
+</header>
+<div id="dummy"></div>

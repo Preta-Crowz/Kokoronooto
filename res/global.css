@@ -23,7 +23,21 @@ header {
     position: fixed;
 }
 
-#dummyHeader {
+p {
+    margin-top: 10px;
+}
+
+footer {
+    background-color: #AFF;
+    width: 100%;
+    height: 50px;
+    bottom: 0;
+    left: 0;
+    padding: 5px;
+    position: fixed;
+}
+
+#dummy {
     width: 100% !important;
     height: 60px !important;
     position: relative;
