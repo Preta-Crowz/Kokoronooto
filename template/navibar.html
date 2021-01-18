@@ -1,0 +1,20 @@
+<div id="navBack" style="display:none;" onclick="hideNav()"></div>
+<nav id="leftNav" style="display:none;">
+    <div class="navHead">
+        <a class="headerBtn navClose" href="#" onclick="hideNav()">
+            <div><i class="fas fa-times fa-2x"></i></div>
+        </a>
+        <div class="navName">메뉴</div>
+    </div>
+</nav>
+<nav id="rightNav" style="display:none;">
+    <div class="navHead">
+        <a class="headerBtn navClose" href="#" onclick="hideNav()">
+            <div><i class="fas fa-times fa-2x"></i></div>
+        </a>
+        <div class="navName">프로필</div>
+    </div>
+    <a class="navItem" href="?{session.auth|/logout|/login}">
+        <div>?{session.auth|<i class="fas fa-sign-out-alt"></i>로그아웃|<i class="fas fa-sign-in-alt"></i>로그인}</div>
+    </a>
+</nav>
