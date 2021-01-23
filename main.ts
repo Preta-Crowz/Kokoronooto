@@ -4,6 +4,7 @@ import { HOST, PORT, TWITCONF } from "./config.ts";
 import { ANY, TWITTER, TEMPLATE } from "./const.ts";
 import { MESSAGE } from "./message.ts";
 import user from "./schema/user.ts";
+import { hmac } from "https://deno.land/x/hmac@v2.0.1/mod.ts";
 
 const app:Application = new Application();
 const session = new Session({
@@ -168,16 +169,83 @@ router
         Authorization: `Bearer ${TWITCONF.bearer}`
       }
     });
+    // const clientAuth = btoa(`${data.get("oauth_token")}:${data.get("oauth_token_secret")}`);
     const userData = await userResponse.json();
+
+    const enc = (str:string) => {
+      return encodeURIComponent(str).replace(/[!'()*]/g, char => '%' + char.charCodeAt(0).toString(16))
+    };
+
+    const nonce = () => {
+      const array = new Uint8Array(32);
+      crypto.getRandomValues(array);
+      let a="";
+      for(var v of array){
+        a += v<16 ? "0" : ""
+        a += v.toString(16)
+      };
+      return a;
+    };
+
+    interface baseData{
+      id:string;
+    }
+
+    const makeHeader = ():Array<any> => [
+      {"key": "oauth_consumer_key", "value": TWITCONF.consumer_key || ""},
+      {"key": "oauth_nonce", "value": nonce() || ""},
+      {"key": "oauth_signature_method", "value": "HMAC-SHA1"},
+      {"key": "oauth_timestamp", "value": Math.round(Date.now()/1000).toString() || ""},
+      {"key": "oauth_token", "value": data.get("oauth_token") || ""},
+      {"key": "oauth_version", "value": "1.0"}
+    ];
+
+    const getFollowData = async (isFollowers:boolean) => {
+      const ftype = isFollowers ? "followers" : "following";
+
+      const baseHeader = makeHeader();
+      let header:string[] = [];
+      for(const v of baseHeader)
+        header.push(`${v.key}="${v.value}"`)
+
+      const signatureBase = ["GET", enc(`https://api.twitter.com/2/users/${data.get("user_id")}/${ftype}`),
+        enc(baseHeader.map(v => `${enc(v.key)}=${enc(v.value)}`).join("&"))].join("&");
+      const signatureKey = `${TWITCONF.consumer_secret}&${data.get("oauth_token_secret")}`
+      const signatureRaw = hmac("SHA1", signatureKey, signatureBase);
+      let signaturePre = "";
+      for(const v of signatureRaw)
+        signaturePre += String.fromCharCode(v as number);
+
+      const signature = btoa(signaturePre);
+      const fdata = await fetch(`https://api.twitter.com/2/users/${data.get("user_id")}/${ftype}`, {
+        method: "GET",
+        headers: {
+          Authorization: `OAuth ${header.join(", ")}, oauth_signature="${enc(signature)}"`
+        }
+        // body: new URLSearchParams({
+        //   grant_type: "client_credentials"
+        // })
+      });
+
+      return [...(await fdata.json()).data.map((v:baseData)=>parseInt(v.id))] as number[];
+    }
+
+    const followersData = await getFollowData(true);
+    const followingData = await getFollowData(false);
+
     if (await user.count({ twitter_id: userData.id }) === 0)
       await user.insertOne({
-        twitter_id: userData.id,
+        twitter_id: parseInt(userData.id_str),
         display_name: userData.name,
         display_id: userData.screen_name,
         profile: userData.profile_image_url_https.replace("_normal.jpg",".jpg"),
         created: new Date(userData.created_at),
         url: userData.id.toString(36),
-        protect: 0
+        viewLevel: 0,
+        askLevel: 0,
+        followers: followersData,
+        following: followingData,
+        block: []
       });
     await c.state.session.set("auth", true);
     await c.state.session.set("id", userData.id);
