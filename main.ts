@@ -1,10 +1,9 @@
 import { Application, Router, helpers, Context,
-  isHttpError, httpErrors, Session, bold, yellow } from "./deps.ts";
+  isHttpError, httpErrors, Session, bold, yellow, hmac } from "./deps.ts";
 import { HOST, PORT, TWITCONF } from "./config.ts";
 import { ANY, TWITTER, TEMPLATE } from "./const.ts";
 import { MESSAGE } from "./message.ts";
 import user from "./schema/user.ts";
-import { hmac } from "https://deno.land/x/hmac@v2.0.1/mod.ts";
 
 const app:Application = new Application();
 const session = new Session({
