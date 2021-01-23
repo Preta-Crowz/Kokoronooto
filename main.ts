@@ -1,7 +1,7 @@
 import { Application, Router, helpers, Context,
   isHttpError, httpErrors, Session, bold, yellow, hmac } from "./deps.ts";
 import { HOST, PORT, TWITCONF } from "./config.ts";
-import { ANY, TWITTER, TEMPLATE } from "./const.ts";
+import { ANY, TEMPLATE } from "./const.ts";
 import { MESSAGE } from "./message.ts";
 import user from "./schema/user.ts";
 
@@ -136,17 +136,17 @@ router
       return;
     }
     c.response.redirect(
-      TWITTER.code.getAuthorizationUri().toString() + "&oauth_token=" + tokens.get("oauth_token")
+      `https://twitter.com/oauth/authorize?response_type=code&client_id=${TWITCONF.consumer_id}&redirect_uri=${TWITCONF.callback}&scope=read:user&oauth_token=${tokens.get("oauth_token")}`
     );
   })
 
   .get("/callback", async (c) => {
-    if (await c.state.session.get("auth")) {
+    const q = helpers.getQuery(c);
+    if (await c.state.session.get("auth") || q.denied) {
       c.response.redirect("/");
       return;
     }
 
-    const q = helpers.getQuery(c);
     const req = await fetch("https://api.twitter.com/oauth/access_token", {
       method: "POST",
       headers: {
