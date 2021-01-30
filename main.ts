@@ -110,7 +110,7 @@ router
     }
     c.state.template = "profile"
     c.state.templateData = {
-      "user":usr
+      "profile":usr
     };
   })
 
@@ -255,51 +255,7 @@ router
     await c.state.session.set("auth");
     await c.state.session.set("id");
     c.response.redirect("/");
-  })
-
-  // .get("/test/insert", async (c) => {
-  //   await test.insertMany([
-  //     {
-  //       cat: "cat",
-  //       lang: "en",
-  //     },
-  //     {
-  //       cat: "ねこ",
-  //       lang: "ja",
-  //     },
-  //     {
-  //       cat: "고양이",
-  //       lang: "ko"
-  //     }
-  //   ]);
-  //   return "Inserted!";
-  // })
-
-  .get("/test", async (c) => {
-    if (!await c.state.session.get("auth")) {
-      c.response.redirect("/");
-      return;
-    }
-    c.state.template = "test";
-    c.state.templateData = {"a":1234,"b":5678,"c":{"d":3141}};
-  })
-
-  .get("/test/count", async (c) => {
-    if (!await c.state.session.get("auth")) {
-      c.response.redirect("/");
-      return;
-    }
-    c.response.body = await user.count({ twitter_id: ANY });
-  })
-
-  .get("/test/findall", async (c) => {
-    if (!await c.state.session.get("auth")) {
-      c.response.redirect("/");
-      return;
-    }
-    c.response.body = await user.find({ twitter_id: ANY });
-  })
-
+  });
 
 app.use(router.routes());
 app.use(router.allowedMethods());

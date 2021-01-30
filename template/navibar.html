@@ -14,7 +14,16 @@
         </a>
         <div class="navName">프로필</div>
     </div>
-    <a class="navItem" href="?{session.auth|/logout|/login}">
-        <div>?{session.auth|<i class="fas fa-sign-out-alt"></i>로그아웃|<i class="fas fa-sign-in-alt"></i>로그인}</div>
+    ?{session.auth|
+    <a class="navItem" href="/logout">
+        <div><i class="fas fa-sign-out-alt"></i>로그아웃</div>
     </a>
+    <a class="navItem" href="/profile/${user.url?me}">
+        <div><i class="fas fa-user-circle"></i>내정보</div>
+    </a>
+    |
+    <a class="navItem" href="/login">
+        <div><i class="fas fa-sign-in-alt"></i>로그인</div>
+    </a>
+    }
 </nav>

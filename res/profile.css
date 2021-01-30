@@ -1,0 +1,49 @@
+#profile {
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+    background-size: 100% 100%;
+    border-radius: 20%;
+    margin-right: 8px;
+}
+
+#username {
+    display: inline-block;
+    font-size: 20px;
+}
+
+#username a {
+    font-size: 12px;
+}
+
+.username {
+    background-color: #ddd;
+    padding: 4px;
+    border-radius: 10px;
+    margin-top: 4px;
+}
+
+#link {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: block;
+    font-size: 20px;
+}
+
+#link a div {
+    display: inline-block;
+    padding: 4px;
+    border-radius: 10px;
+    background-color: #fdf
+}
+
+#link a div svg {
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+#profileTop {
+    padding: 8px;
+    border-radius: 20px;
+    background-color: #ffa;
+}

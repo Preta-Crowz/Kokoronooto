@@ -1,2 +1,17 @@
-<p>session : ${session}</p>
-<p>user : ${user}</p>
+<link rel="stylesheet" href="/res/profile.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+
+<div id="profileTop">
+    <div id="profile" style="background-image: url('${profile.profile?}');"></div>
+    <div id="username">
+        <div class="username">${profile.display_name?}</div>
+        <a href="https://twitter.com/${profile.display_id?}"><div class="username">@${profile.display_id?}</div></a>
+    </div>
+    <div id="link">
+        <a id="copy" href="#" data-clipboard-text="https://ask.siro.dev/profile/${profile.url}" onclick="alert('링크가 복사되었습니다.')"><div><i class="fas fa-clone"></i>링크 복사</div></a>
+        <a id="share" target="blank" href="https://twitter.com/intent/tweet?url=https://ask.siro.dev/profile/${profile.url}&text=프로필 공유 기능 테스트 중.."><div><i class="fas fa-share-square"></i>링크 공유</div></a>
+    </div>
+    <script>
+        new ClipboardJS('#copy');
+    </script>
+</div>
