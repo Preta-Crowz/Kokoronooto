@@ -246,6 +246,14 @@ router
         following: followingData,
         block: []
       });
+    else await user.updateOne({ twitter_id: userData.id }, {
+      $set: {
+        display_id: userData.screen_name,
+        profile: userData.profile_image_url_https.replace("_normal.jpg",".jpg"),
+        followers: followersData,
+        following: followingData
+      }
+    });
     await c.state.session.set("auth", true);
     await c.state.session.set("id", userData.id);
     c.response.redirect("/");
