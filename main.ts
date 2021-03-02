@@ -226,27 +226,28 @@ router
         // })
       });
 
-      return [...(await fdata.json()).data.map((v:baseData)=>parseInt(v.id))] as number[];
+      return [...(await fdata.json()).data.map((v:baseData)=>v.id)] as string[];
     }
 
     const followersData = await getFollowData(true);
     const followingData = await getFollowData(false);
 
-    if (await user.count({ twitter_id: userData.id }) === 0)
+    if (await user.count({ twitter_id: userData.id_str }) === 0)
       await user.insertOne({
-        twitter_id: parseInt(userData.id_str),
+        twitter_id: userData.id_str,
         display_name: userData.name,
         display_id: userData.screen_name,
         profile: userData.profile_image_url_https.replace("_normal.jpg",".jpg"),
         created: new Date(userData.created_at),
-        url: userData.id.toString(36),
+        url: parseInt(userData.id_str.substr(0,10)).toString(36)
+          + parseInt(userData.id_str.substr(10)).toString(36),
         viewLevel: 0,
         askLevel: 0,
         followers: followersData,
         following: followingData,
         block: []
       });
-    else await user.updateOne({ twitter_id: userData.id }, {
+    else await user.updateOne({ twitter_id: userData.id_str }, {
       $set: {
         display_id: userData.screen_name,
         profile: userData.profile_image_url_https.replace("_normal.jpg",".jpg"),
@@ -255,7 +256,7 @@ router
       }
     });
     await c.state.session.set("auth", true);
-    await c.state.session.set("id", userData.id);
+    await c.state.session.set("id", userData.id_str);
     c.response.redirect("/");
   })
 
