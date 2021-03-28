@@ -105,12 +105,19 @@ router
 
   .get("/profile/:id", async (c) => {
     const usr = await user.findOne({ url: c.params.id });
-    if (usr === null) {
-      return;
-    }
-    c.state.template = "profile"
+    if (usr === null) return;
+    c.state.template = "profile";
     c.state.templateData = {
-      "profile":usr
+      "profile": usr
+    };
+  })
+
+  .get("/question/:id", async (c) => {
+    const usr = await user.findOne({ url: c.params.id });
+    if (usr === null) return;
+    c.state.template = "question";
+    c.state.templateData = {
+      "profile": usr
     };
   })
 

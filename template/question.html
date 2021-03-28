@@ -1,0 +1,22 @@
+<link rel="stylesheet" href="/res/profile.css" />
+
+<div id="profileTop">
+    <div id="profile" style="background-image: url('${profile.profile?}');"></div>
+    <div id="username">
+        <div class="username">${profile.display_name?}</div>
+        <a href="https://twitter.com/${profile.display_id?}"><div class="username">@${profile.display_id?}</div></a>
+    </div>
+</div>
+
+<div class="questionBox">
+    <form id="questionForm" method="post" accept-charset="utf-8">
+        <label>질문을 입력해주세요!</label>
+        <input type="text" placeholder="무엇이 궁금한가요?" name="title">
+        <textarea placeholder="자세한 내용을 묻고싶나요? 여기에 더 적어주세요!" form="questionForm" name="question"></textarea>
+        <label class="checkLabel">프로필을 공개하고 질문을 전송합니다
+            <input type="checkbox" name="isAnonymous" value="isAnonymous" ?{session.auth||disabled}>
+            <span class="checkBody"></span>
+        </label>
+        <input type="submit" value="질문을 전송합니다">
+    </form>
+</div>

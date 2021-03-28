@@ -47,3 +47,57 @@
     border-radius: 20px;
     background-color: #ffa;
 }
+
+.questionBox {
+    padding: 12px;
+    border-radius: 20px;
+    background-color: #ddd;
+    margin-top: 8px;
+}
+
+.questionBox label {
+    padding: 4px;
+    display: inline-block;
+}
+
+.questionBox textarea, .questionBox input[type="text"], .questionBox input[type="submit"] {
+    width: 100%;
+    margin-top: 4px;
+    padding: 4px;
+    display: block;
+    border-radius: 8px;
+    border-width: 0;
+    background-color: #eee;
+}
+
+.questionBox input[type="submit"] {
+    font-size: 20px;
+}
+
+.checkLabel input {
+    position: absolute;
+    display: inline-block;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkBody {
+    position: relative;
+    display: inline-block;
+    top: 2px;
+    left: 0;
+    height: 16px;
+    width: 16px;
+    border-radius: 4px;
+    background-color: #f77;
+}
+
+.checkLabel input:checked ~ .checkBody {
+  background-color: #7f7;
+}
+
+.checkLabel input:disabled ~ .checkBody {
+  background-color: #777;
+}

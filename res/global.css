@@ -5,7 +5,7 @@
     font-style: normal;
 }
 
-html {
+html, input, textarea {
     font-family: 'TmoneyRoundWindRegular';
 }
 
@@ -156,4 +156,8 @@ section {
 
 .navItem:hover, .navItem:active  {
     background-color: #fff7;
+}
+
+textarea {
+    resize: none;
 }
